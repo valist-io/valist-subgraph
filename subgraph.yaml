@@ -1,0 +1,29 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: ValistRegistry
+    network: mumbai
+    source:
+      address: "0x2Be6D782dBA2C52Cd0a41c6052e914dCaBcCD78e"
+      abi: ValistRegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - MappingEvent
+      abis:
+        - name: ValistRegistry
+          file: ./abis/ValistRegistry.json
+      eventHandlers:
+        - event: MappingEvent(indexed bytes32,indexed string,string)
+          handler: handleMappingEvent
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+      file: ./src/mapping.ts

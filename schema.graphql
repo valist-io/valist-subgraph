@@ -1,0 +1,23 @@
+type Organization @entity {
+  id: ID!
+  orgID: Bytes! # bytes32
+  nameHash: Bytes!
+  name: String!
+  repos: [Repository!]
+}
+
+type Repository @entity {
+  id: ID!
+  orgID: Bytes!
+  orgName: String!
+  nameHash: Bytes!
+  name: String!
+}
+
+type Release @entity {
+  id: ID!
+  orgID: Bytes!
+  orgName: String!
+  repoName: String!
+  tag: String!
+}
