@@ -4,9 +4,9 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: ValistRegistry
-    network: mumbai
+    network: ganache
     source:
-      address: "0x2Be6D782dBA2C52Cd0a41c6052e914dCaBcCD78e"
+      address: "0xC2992736137430FeFd7695bD7e2617420BE4c2a1"
       abi: ValistRegistry
     mapping:
       kind: ethereum/events
@@ -27,3 +27,37 @@ dataSources:
         - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
           handler: handleRoleRevoked
       file: ValistRegistry/ValistRegistry.wasm
+  - kind: ethereum/contract
+    name: Valist
+    network: ganache
+    source:
+      address: "0xA9b1F2f115670FcD0b7C143A9A2FcB88aF8A27Bb"
+      abi: Valist
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - MetaUpdate
+        - OrgCreated
+        - RepoCreated
+        - VoteKeyEvent
+        - VoteReleaseEvent
+        - VoteThresholdEvent
+      abis:
+        - name: Valist
+          file: Valist/abis/Valist.json
+      eventHandlers:
+        - event: OrgCreated(bytes32,indexed string,string)
+          handler: handleOrgCreated
+        - event: RepoCreated(bytes32,indexed string,string,indexed string,string)
+          handler: handleRepoCreated
+        - event: MetaUpdate(indexed bytes32,indexed string,indexed address,string)
+          handler: handleMetaUpdate
+        - event: VoteThresholdEvent(indexed bytes32,string,address,indexed uint256,uint256,uint256)
+          handler: handleVoteThresholdEvent
+        - event: VoteKeyEvent(indexed bytes32,string,address,bytes32,address,uint256,uint256)
+          handler: handleVoteKeyEvent
+        - event: VoteReleaseEvent(bytes32,string,string,string,string,address,uint256,uint256)
+          handler: handleVoteReleaseEvent
+      file: Valist/Valist.wasm

@@ -11,14 +11,245 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
+export class Release extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("repo", Value.fromString(""));
+    this.set("tag", Value.fromString(""));
+    this.set("releaseCID", Value.fromString(""));
+    this.set("signers", Value.fromStringArray(new Array(0)));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Release entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Release entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Release", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Release | null {
+    return changetype<Release | null>(store.get("Release", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get repo(): string {
+    let value = this.get("repo");
+    return value!.toString();
+  }
+
+  set repo(value: string) {
+    this.set("repo", Value.fromString(value));
+  }
+
+  get tag(): string {
+    let value = this.get("tag");
+    return value!.toString();
+  }
+
+  set tag(value: string) {
+    this.set("tag", Value.fromString(value));
+  }
+
+  get releaseCID(): string {
+    let value = this.get("releaseCID");
+    return value!.toString();
+  }
+
+  set releaseCID(value: string) {
+    this.set("releaseCID", Value.fromString(value));
+  }
+
+  get signers(): Array<string> {
+    let value = this.get("signers");
+    return value!.toStringArray();
+  }
+
+  set signers(value: Array<string>) {
+    this.set("signers", Value.fromStringArray(value));
+  }
+}
+
+export class OrgMeta extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save OrgMeta entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save OrgMeta entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("OrgMeta", id.toString(), this);
+    }
+  }
+
+  static load(id: string): OrgMeta | null {
+    return changetype<OrgMeta | null>(store.get("OrgMeta", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get name(): string | null {
+    let value = this.get("name");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set name(value: string | null) {
+    if (!value) {
+      this.unset("name");
+    } else {
+      this.set("name", Value.fromString(<string>value));
+    }
+  }
+
+  get description(): string | null {
+    let value = this.get("description");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set description(value: string | null) {
+    if (!value) {
+      this.unset("description");
+    } else {
+      this.set("description", Value.fromString(<string>value));
+    }
+  }
+
+  get homepage(): string | null {
+    let value = this.get("homepage");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set homepage(value: string | null) {
+    if (!value) {
+      this.unset("homepage");
+    } else {
+      this.set("homepage", Value.fromString(<string>value));
+    }
+  }
+}
+
+export class Repository extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("org", Value.fromString(""));
+    this.set("name", Value.fromString(""));
+    this.set("metaCID", Value.fromString(""));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Repository entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Repository entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Repository", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Repository | null {
+    return changetype<Repository | null>(store.get("Repository", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get org(): string {
+    let value = this.get("org");
+    return value!.toString();
+  }
+
+  set org(value: string) {
+    this.set("org", Value.fromString(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value!.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get metaCID(): string {
+    let value = this.get("metaCID");
+    return value!.toString();
+  }
+
+  set metaCID(value: string) {
+    this.set("metaCID", Value.fromString(value));
+  }
+
+  get releases(): Array<string> {
+    let value = this.get("releases");
+    return value!.toStringArray();
+  }
+
+  set releases(value: Array<string>) {
+    this.set("releases", Value.fromStringArray(value));
+  }
+}
+
 export class Organization extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
 
     this.set("orgID", Value.fromBytes(Bytes.empty()));
-    this.set("nameHash", Value.fromBytes(Bytes.empty()));
     this.set("name", Value.fromString(""));
+    this.set("metaCID", Value.fromString(""));
   }
 
   save(): void {
@@ -56,15 +287,6 @@ export class Organization extends Entity {
     this.set("orgID", Value.fromBytes(value));
   }
 
-  get nameHash(): Bytes {
-    let value = this.get("nameHash");
-    return value!.toBytes();
-  }
-
-  set nameHash(value: Bytes) {
-    this.set("nameHash", Value.fromBytes(value));
-  }
-
   get name(): string {
     let value = this.get("name");
     return value!.toString();
@@ -74,168 +296,38 @@ export class Organization extends Entity {
     this.set("name", Value.fromString(value));
   }
 
-  get repos(): Array<string> | null {
-    let value = this.get("repos");
+  get metaCID(): string {
+    let value = this.get("metaCID");
+    return value!.toString();
+  }
+
+  set metaCID(value: string) {
+    this.set("metaCID", Value.fromString(value));
+  }
+
+  get meta(): string | null {
+    let value = this.get("meta");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toStringArray();
+      return value.toString();
     }
   }
 
-  set repos(value: Array<string> | null) {
+  set meta(value: string | null) {
     if (!value) {
-      this.unset("repos");
+      this.unset("meta");
     } else {
-      this.set("repos", Value.fromStringArray(<Array<string>>value));
-    }
-  }
-}
-
-export class Repository extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-
-    this.set("orgID", Value.fromBytes(Bytes.empty()));
-    this.set("orgName", Value.fromString(""));
-    this.set("nameHash", Value.fromBytes(Bytes.empty()));
-    this.set("name", Value.fromString(""));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save Repository entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        "Cannot save Repository entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
-      );
-      store.set("Repository", id.toString(), this);
+      this.set("meta", Value.fromString(<string>value));
     }
   }
 
-  static load(id: string): Repository | null {
-    return changetype<Repository | null>(store.get("Repository", id));
+  get repos(): Array<string> {
+    let value = this.get("repos");
+    return value!.toStringArray();
   }
 
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get orgID(): Bytes {
-    let value = this.get("orgID");
-    return value!.toBytes();
-  }
-
-  set orgID(value: Bytes) {
-    this.set("orgID", Value.fromBytes(value));
-  }
-
-  get orgName(): string {
-    let value = this.get("orgName");
-    return value!.toString();
-  }
-
-  set orgName(value: string) {
-    this.set("orgName", Value.fromString(value));
-  }
-
-  get nameHash(): Bytes {
-    let value = this.get("nameHash");
-    return value!.toBytes();
-  }
-
-  set nameHash(value: Bytes) {
-    this.set("nameHash", Value.fromBytes(value));
-  }
-
-  get name(): string {
-    let value = this.get("name");
-    return value!.toString();
-  }
-
-  set name(value: string) {
-    this.set("name", Value.fromString(value));
-  }
-}
-
-export class Release extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-
-    this.set("orgID", Value.fromBytes(Bytes.empty()));
-    this.set("orgName", Value.fromString(""));
-    this.set("repoName", Value.fromString(""));
-    this.set("tag", Value.fromString(""));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save Release entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        "Cannot save Release entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
-      );
-      store.set("Release", id.toString(), this);
-    }
-  }
-
-  static load(id: string): Release | null {
-    return changetype<Release | null>(store.get("Release", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get orgID(): Bytes {
-    let value = this.get("orgID");
-    return value!.toBytes();
-  }
-
-  set orgID(value: Bytes) {
-    this.set("orgID", Value.fromBytes(value));
-  }
-
-  get orgName(): string {
-    let value = this.get("orgName");
-    return value!.toString();
-  }
-
-  set orgName(value: string) {
-    this.set("orgName", Value.fromString(value));
-  }
-
-  get repoName(): string {
-    let value = this.get("repoName");
-    return value!.toString();
-  }
-
-  set repoName(value: string) {
-    this.set("repoName", Value.fromString(value));
-  }
-
-  get tag(): string {
-    let value = this.get("tag");
-    return value!.toString();
-  }
-
-  set tag(value: string) {
-    this.set("tag", Value.fromString(value));
+  set repos(value: Array<string>) {
+    this.set("repos", Value.fromStringArray(value));
   }
 }

@@ -1,23 +1,31 @@
-type Organization @entity {
+type Release @entity {
   id: ID!
-  orgID: Bytes! # bytes32
-  nameHash: Bytes!
-  name: String!
-  repos: [Repository!]
+  repo: Repository!
+  tag: String!
+  releaseCID: String!
+  signers: [String!]!
 }
+
+# type OrgMeta @entity {
+#   id: ID!
+#   name: String
+#   description: String
+#   homepage: String
+# }
 
 type Repository @entity {
   id: ID!
-  orgID: Bytes!
-  orgName: String!
-  nameHash: Bytes!
+  org: Organization!
   name: String!
+  metaCID: String!
+  releases: [Release!]! @derivedFrom(field: "repo")
 }
 
-type Release @entity {
+type Organization @entity {
   id: ID!
-  orgID: Bytes!
-  orgName: String!
-  repoName: String!
-  tag: String!
+  orgID: Bytes! # bytes32
+  name: String!
+  metaCID: String!
+  # meta: OrgMeta
+  repos: [Repository!]! @derivedFrom(field: "org")
 }
