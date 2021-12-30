@@ -17,8 +17,10 @@ type Repository @entity {
   id: ID!
   org: Organization!
   name: String!
+  test: String
   metaCID: String!
   releases: [Release!]! @derivedFrom(field: "repo")
+  keys: [Key!]! @derivedFrom(field: "repo")
 }
 
 type Organization @entity {
@@ -26,6 +28,26 @@ type Organization @entity {
   orgID: Bytes! # bytes32
   name: String!
   metaCID: String!
-  # meta: OrgMeta
   repos: [Repository!]! @derivedFrom(field: "org")
+  keys: [Key!]! @derivedFrom(field: "org")
 }
+
+type Key @entity {
+  id: ID!
+  role: String!
+  address: String!
+  org: Organization
+  repo: Repository
+}
+
+type Activity @entity {
+  id: ID!
+  text: String!
+}
+
+# type RepoKey @entity {
+#   id: ID!
+#   role: String!
+#   address: String!
+#   repo: Repository!
+# }

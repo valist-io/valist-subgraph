@@ -1,13 +1,11 @@
 import {
-  Valist,
   MetaUpdate,
   OrgCreated,
   RepoCreated,
   VoteKeyEvent,
   VoteReleaseEvent,
-  VoteThresholdEvent
 } from "../generated/Valist/Valist"
-import { Organization, OrgMeta, Release, Repository } from "../generated/schema"
+import { Activity, Key, Organization, Release, Repository } from "../generated/schema"
 // import { ipfs, json } from "@graphprotocol/graph-ts";
 
 export function handleMetaUpdate(event: MetaUpdate): void {
@@ -64,29 +62,13 @@ export function handleMetaUpdate(event: MetaUpdate): void {
 
 export function handleOrgCreated(event: OrgCreated): void {
   const org = new Organization(event.params._orgID.toHexString());
-  // const orgMeta = new OrgMeta(event.params._orgID.toHexString());
-
   org.orgID = event.params._orgID;
-
   org.metaCID = event.params._metaCID;
-
-  // const metaBytes = ipfs.cat(org.metaCID);
-  // if (metaBytes) {
-  //   const metaJSON = json.fromBytes(metaBytes).toObject();
-    
-  //   const name = metaJSON.get("name");
-  //   if (name) orgMeta.name = name.toString();
-
-  //   const description = metaJSON.get("description");
-  //   if (description) orgMeta.description = description.toString();
-
-  //   const homepage = metaJSON.get("homepage");
-  //   if (homepage) orgMeta.homepage = homepage.toString();
-  // }
-  
-  // org.meta = orgMeta.id;
-  // orgMeta.save();
   org.save();
+
+  const activity = new Activity(event.transaction.hash.toHex());
+  activity.text = `created account ${org.name}`
+  activity.save();
 }
 
 export function handleRepoCreated(event: RepoCreated): void {
@@ -95,15 +77,44 @@ export function handleRepoCreated(event: RepoCreated): void {
   if (!org) return
 
   const repoID = `${org.name}/${event.params._repoName}`;
-  let repo = new Repository(repoID);
+  const repo = new Repository(repoID);
   repo.org = event.params._orgID.toHexString();
+  repo.test = repoID;
 
   repo.name = event.params._repoName;
   repo.metaCID = event.params._metaCID;
   repo.save();
+
+  const activity = new Activity(event.transaction.hash.toHex());
+  activity.text = `created project ${repoID}`
+  activity.save();
 }
 
-export function handleVoteKeyEvent(event: VoteKeyEvent): void {}
+export function handleVoteKeyEvent(event: VoteKeyEvent): void {
+  const org = Organization.load(event.params._orgID.toHexString());
+
+  if (!org) return
+  const keyID = `${event.params._orgID.toHexString()}/${event.params._repoName}/${event.params._key.toHexString()}`
+  
+  let key = Key.load(keyID);
+  if (!key){
+    key = new Key(keyID);
+  }
+
+  key.address = event.params._key.toHexString();
+
+  if (event.params._repoName == "") {
+    key.role = "orgAdmin";
+    key.org = event.params._orgID.toHexString();
+  }
+
+  if (event.params._repoName != "") {
+    key.role = "repoDev";
+    key.repo = `${org.name}/${event.params._repoName}`;
+  }
+
+  key.save();
+}
 
 export function handleVoteReleaseEvent(event: VoteReleaseEvent): void {
     const org = Organization.load(event.params._orgID.toHexString());
@@ -132,4 +143,19 @@ export function handleVoteReleaseEvent(event: VoteReleaseEvent): void {
     release.save();
 }
 
-export function handleVoteThresholdEvent(event: VoteThresholdEvent): void {}
+  // const metaBytes = ipfs.cat(org.metaCID);
+  // if (metaBytes) {
+  //   const metaJSON = json.fromBytes(metaBytes).toObject();
+    
+  //   const name = metaJSON.get("name");
+  //   if (name) orgMeta.name = name.toString();
+
+  //   const description = metaJSON.get("description");
+  //   if (description) orgMeta.description = description.toString();
+
+  //   const homepage = metaJSON.get("homepage");
+  //   if (homepage) orgMeta.homepage = homepage.toString();
+  // }
+  
+  // org.meta = orgMeta.id;
+  // orgMeta.save();

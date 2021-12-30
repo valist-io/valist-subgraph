@@ -61,6 +61,12 @@
         "internalType": "string",
         "name": "_metaCID",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
       }
     ],
     "name": "OrgCreated",
@@ -135,18 +141,6 @@
         "internalType": "address",
         "name": "_key",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_sigCount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_threshold",
-        "type": "uint256"
       }
     ],
     "name": "VoteKeyEvent",
@@ -190,164 +184,10 @@
         "internalType": "address",
         "name": "_signer",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_sigCount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_threshold",
-        "type": "uint256"
       }
     ],
     "name": "VoteReleaseEvent",
     "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "_orgID",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "_repoName",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_signer",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_pendingThreshold",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_sigCount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_threshold",
-        "type": "uint256"
-      }
-    ],
-    "name": "VoteThresholdEvent",
-    "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_orgID",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "string",
-        "name": "_repoName",
-        "type": "string"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_operation",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "_key",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_requestIndex",
-        "type": "uint256"
-      }
-    ],
-    "name": "clearPendingKey",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_orgID",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "string",
-        "name": "_repoName",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_tag",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_releaseCID",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_metaCID",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_requestIndex",
-        "type": "uint256"
-      }
-    ],
-    "name": "clearPendingRelease",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_orgID",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "string",
-        "name": "_repoName",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_threshold",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_requestIndex",
-        "type": "uint256"
-      }
-    ],
-    "name": "clearPendingThreshold",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
   },
   {
     "inputs": [
@@ -430,49 +270,6 @@
         "internalType": "bytes32",
         "name": "_selector",
         "type": "bytes32"
-      }
-    ],
-    "name": "getPendingReleaseCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_selector",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getPendingVotes",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_selector",
-        "type": "bytes32"
       },
       {
         "internalType": "uint256",
@@ -539,44 +336,6 @@
         "internalType": "address[]",
         "name": "",
         "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_selector",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getRoleRequestCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_selector",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getThresholdRequestCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -696,16 +455,6 @@
     ],
     "name": "orgs",
     "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "threshold",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "thresholdDate",
-        "type": "uint256"
-      },
       {
         "internalType": "string",
         "name": "metaCID",
@@ -835,16 +584,6 @@
         "internalType": "bool",
         "name": "exists",
         "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "threshold",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "thresholdDate",
-        "type": "uint256"
       },
       {
         "internalType": "string",
@@ -985,29 +724,6 @@
       }
     ],
     "name": "voteRelease",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_orgID",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "string",
-        "name": "_repoName",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_threshold",
-        "type": "uint256"
-      }
-    ],
-    "name": "voteThreshold",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
