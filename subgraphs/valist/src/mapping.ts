@@ -344,10 +344,10 @@ export function handleReleaseRejected(event: ReleaseRejected): void {
 
 function _parseKeywords(uri: string): Array<string> {
   const keywords = new Array<string>();
-  if (uri.includes('/ipfs/')) return keywords;
+  if (!uri.includes('/ipfs/')) return keywords;
 
   const index = uri.lastIndexOf('/ipfs/');
-  const hash = uri.substring(index+7);
+  const hash = uri.substring(index+6);
 
   const metaBytes = ipfs.cat(hash);
   if (!metaBytes) return keywords;
