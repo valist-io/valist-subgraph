@@ -1,5 +1,5 @@
+import { ipfs, json, JSONValueKind } from '@graphprotocol/graph-ts';
 import { Team, Release, Project, User, Log } from "../generated/schema";
-
 import {
   Valist,
   TeamCreated,
@@ -128,6 +128,7 @@ export function handleProjectCreated(event: ProjectCreated): void {
   project.createdTx = event.transaction.hash.toHex();
   project.updatedTx = event.transaction.hash.toHex();
   project.createdAt = event.block.number.toU32();
+  project.keywords = _parseKeywords(event.params._metaURI);
   project.save();
 
   const log = new Log(event.transaction.hash.toHex());
@@ -150,6 +151,7 @@ export function handleProjectUpdated(event: ProjectUpdated): void {
   project.team = teamID.toHex();
   project.metaURI = event.params._metaURI;
   project.updatedTx = event.transaction.hash.toHex();
+  project.keywords = _parseKeywords(event.params._metaURI);
   project.save();
 
   const log = new Log(event.transaction.hash.toHex());
@@ -338,6 +340,34 @@ export function handleReleaseRejected(event: ReleaseRejected): void {
   log.release = event.params._releaseName;
   log.sender = event.params._sender.toHex();
   log.save();
+}
+
+function _parseKeywords(uri: string): Array<string> {
+  const keywords = new Array<string>();
+  if (uri.includes('/ipfs/')) return keywords;
+
+  const index = uri.lastIndexOf('/ipfs/');
+  const hash = uri.substring(index+7);
+
+  const metaBytes = ipfs.cat(hash);
+  if (!metaBytes) return keywords;
+
+  const metaValue = json.fromBytes(metaBytes);
+  if (metaValue.kind != JSONValueKind.OBJECT) return keywords;
+
+  const metaObject = metaValue.toObject();
+  if (!metaObject.isSet('keywords')) return keywords;
+
+  const keywordsValue = metaObject.mustGet('keywords');
+  if (keywordsValue.kind != JSONValueKind.ARRAY) return keywords;
+
+  const keywordsArray = keywordsValue.toArray();
+  for (let i = 0; i < keywordsArray.length; i++) {
+    if (keywordsArray[i].kind != JSONValueKind.STRING) continue;
+    keywords.push(keywordsArray[i].toString());
+  }
+
+  return keywords;
 }
 
 function _arrayToSet(arr: Array<string>): Set<string> {
