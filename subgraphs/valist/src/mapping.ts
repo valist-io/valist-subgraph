@@ -1,4 +1,4 @@
-import { ipfs, json, JSONValueKind } from '@graphprotocol/graph-ts';
+import { parseMetaJSON, parseKeywords } from "./metadata";
 import { Team, Release, Project, User, Log } from "../generated/schema";
 import {
   Valist,
@@ -62,10 +62,10 @@ export function handleTeamMemberAdded(event: TeamMemberAdded): void {
   let user = User.load(event.params._member.toHex());
   if (user == null) user = new User(event.params._member.toHex());
 
-  const teams = _arrayToSet(user.teams);
+  const teams = user.teams.reduce((s, v) => s.add(v), new Set<string>());
   teams.add(teamID.toHex());
 
-  const members = _arrayToSet(team.members);
+  const members = team.members.reduce((s, v) => s.add(v), new Set<string>());
   members.add(event.params._member.toHex());
 
   user.teams = teams.values();
@@ -94,10 +94,10 @@ export function handleTeamMemberRemoved(event: TeamMemberRemoved): void {
   let user = User.load(event.params._member.toHex());
   if (user == null) user = new User(event.params._member.toHex());
 
-  const teams = _arrayToSet(user.projects);
+  const teams = user.teams.reduce((s, v) => s.add(v), new Set<string>());
   teams.delete(teamID.toHex());
 
-  const members = _arrayToSet(team.members);
+  const members = team.members.reduce((s, v) => s.add(v), new Set<string>());
   members.delete(event.params._member.toHex());
 
   user.teams = teams.values();
@@ -121,6 +121,9 @@ export function handleProjectCreated(event: ProjectCreated): void {
   const teamID = valist.getTeamID(event.params._teamName);
   const projectID = valist.getProjectID(teamID, event.params._projectName);
 
+  const metaJSON = parseMetaJSON(event.params._metaURI);
+  const keywords = parseKeywords(metaJSON);
+
   const project = new Project(projectID.toHex());
   project.name = event.params._projectName;
   project.team = teamID.toHex();
@@ -128,7 +131,7 @@ export function handleProjectCreated(event: ProjectCreated): void {
   project.createdTx = event.transaction.hash.toHex();
   project.updatedTx = event.transaction.hash.toHex();
   project.createdAt = event.block.number.toU32();
-  project.keywords = _parseKeywords(event.params._metaURI);
+  project.keywords = keywords;
   project.save();
 
   const log = new Log(event.transaction.hash.toHex());
@@ -147,11 +150,14 @@ export function handleProjectUpdated(event: ProjectUpdated): void {
   let project = Project.load(projectID.toHex())
   if (project == null) project = new Project(projectID.toHex());
 
+  const metaJSON = parseMetaJSON(event.params._metaURI);
+  const keywords = parseKeywords(metaJSON);
+
   project.name = event.params._projectName;
   project.team = teamID.toHex();
   project.metaURI = event.params._metaURI;
   project.updatedTx = event.transaction.hash.toHex();
-  project.keywords = _parseKeywords(event.params._metaURI);
+  project.keywords = keywords;
   project.save();
 
   const log = new Log(event.transaction.hash.toHex());
@@ -173,10 +179,10 @@ export function handleProjectMemberAdded(event: ProjectMemberAdded): void {
   let user = User.load(event.params._member.toHex());
   if (user == null) user = new User(event.params._member.toHex());
 
-  const projects = _arrayToSet(user.projects);
+  const projects = user.projects.reduce((s, v) => s.add(v), new Set<string>());
   projects.add(projectID.toHex());
 
-  const members = _arrayToSet(project.members);
+  const members = project.members.reduce((s, v) => s.add(v), new Set<string>());
   members.add(event.params._member.toHex());
 
   user.projects = projects.values();
@@ -208,10 +214,10 @@ export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
   let user = User.load(event.params._member.toHex());
   if (user == null) user = new User(event.params._member.toHex());
 
-  const projects = _arrayToSet(user.projects);
+  const projects = user.projects.reduce((s, v) => s.add(v), new Set<string>());
   projects.delete(projectID.toHex());
 
-  const members = _arrayToSet(project.members);
+  const members = project.members.reduce((s, v) => s.add(v), new Set<string>());
   members.delete(event.params._member.toHex());
 
   user.projects = projects.values();
@@ -268,16 +274,16 @@ export function handleReleaseApproved(event: ReleaseApproved): void {
   let user = User.load(event.params._sender.toHex());
   if (user == null) user = new User(event.params._sender.toHex());
 
-  const approvers = _arrayToSet(release.approvers);
+  const approvers = release.approvers.reduce((s, v) => s.add(v), new Set<string>());
   approvers.add(event.params._sender.toHex());
 
-  const rejectors = _arrayToSet(release.rejectors);
+  const rejectors = release.rejectors.reduce((s, v) => s.add(v), new Set<string>());
   rejectors.delete(event.params._sender.toHex());
 
-  const approved = _arrayToSet(user.approved);
+  const approved = user.approved.reduce((s, v) => s.add(v), new Set<string>());
   approved.add(releaseID.toHex());
 
-  const rejected = _arrayToSet(user.rejected);
+  const rejected = user.rejected.reduce((s, v) => s.add(v), new Set<string>());
   rejected.delete(releaseID.toHex());
 
   user.rejected = rejected.values();
@@ -311,16 +317,16 @@ export function handleReleaseRejected(event: ReleaseRejected): void {
   let user = User.load(event.params._sender.toHex());
   if (user == null) user = new User(event.params._sender.toHex());
 
-  const approvers = _arrayToSet(release.approvers);
+  const approvers = release.approvers.reduce((s, v) => s.add(v), new Set<string>());
   approvers.delete(event.params._sender.toHex());
 
-  const rejectors = _arrayToSet(release.rejectors);
+  const rejectors = release.rejectors.reduce((s, v) => s.add(v), new Set<string>());
   rejectors.add(event.params._sender.toHex());
 
-  const approved = _arrayToSet(user.approved);
+  const approved = user.approved.reduce((s, v) => s.add(v), new Set<string>());
   approved.delete(releaseID.toHex());
 
-  const rejected = _arrayToSet(user.rejected);
+  const rejected = user.rejected.reduce((s, v) => s.add(v), new Set<string>());
   rejected.add(releaseID.toHex());
 
   user.rejected = rejected.values();
@@ -340,40 +346,4 @@ export function handleReleaseRejected(event: ReleaseRejected): void {
   log.release = event.params._releaseName;
   log.sender = event.params._sender.toHex();
   log.save();
-}
-
-function _parseKeywords(uri: string): Array<string> {
-  const keywords = new Array<string>();
-  if (!uri.includes('/ipfs/')) return keywords;
-
-  const index = uri.lastIndexOf('/ipfs/');
-  const hash = uri.substring(index+6);
-
-  const metaBytes = ipfs.cat(hash);
-  if (!metaBytes) return keywords;
-
-  const metaValue = json.fromBytes(metaBytes);
-  if (metaValue.kind != JSONValueKind.OBJECT) return keywords;
-
-  const metaObject = metaValue.toObject();
-  if (!metaObject.isSet('keywords')) return keywords;
-
-  const keywordsValue = metaObject.mustGet('keywords');
-  if (keywordsValue.kind != JSONValueKind.ARRAY) return keywords;
-
-  const keywordsArray = keywordsValue.toArray();
-  for (let i = 0; i < keywordsArray.length; i++) {
-    if (keywordsArray[i].kind != JSONValueKind.STRING) continue;
-    keywords.push(keywordsArray[i].toString());
-  }
-
-  return keywords;
-}
-
-function _arrayToSet(arr: Array<string>): Set<string> {
-  const set = new Set<string>();
-  for (let i = 0; i < arr.length; i++) {
-    set.add(arr[i]);
-  }
-  return set;
 }
