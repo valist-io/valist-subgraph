@@ -1,0 +1,49 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Registry
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: Registry
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Project
+        - Release
+        - Log
+      abis:
+        - name: Registry
+          file: ./abis/Registry.json
+      eventHandlers:
+        - event: AccountCreated(uint256,string,string,address,address)
+          handler: handleAccountCreated
+        - event: AccountUpdated(uint256,string,address)
+          handler: handleAccountUpdate
+        - event: AccountMemberAdded(uint256,address,address)
+          handler: handleAccountMemberAdded
+        - event: AccountMemberRemoved(uint256,address,address)
+          handler: handleAccountMemberRemoved
+        - event: BeneficiaryUpdated(uint256,address,address)
+          handler: handleBeneficiaryUpdated
+        - event: ProjectCreated(uint256,uint256,string,string,address)
+          handler: handleProjectCreated
+        - event: ProjectUpdated(uint256,string,address)
+          handler: handleProjectUpdated
+        - event: ProjectMemberAdded(uint256,address,address)
+          handler: handleProjectMemberAdded
+        - event: ProjectMemberRemoved(uint256,address,address)
+          handler: handleProjectMemberRemoved
+        - event: ReleaseCreated(uint256,uint256,string,string,address)
+          handler: handleReleaseCreated
+        - event: ReleaseApproved(uint256,address)
+          handler: handleReleaseApproved
+        - event: ReleaseRevoked(uint256,address)
+          handler: handleReleaseRevoked
+      file: ./src/mapping.ts

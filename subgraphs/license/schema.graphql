@@ -1,21 +1,27 @@
-type License @entity {
+type Project @entity {
   id: ID!
-  name: String!
-  team: String!
-  project: String!
-  metaURI: String!
-  mintPrice: String!
-  createdTx: String!
-  updatedTx: String!
+  products: [Product!]! @derivedFrom(field: "project")
+  purchases: [Purchase!]! @derivedFrom(field: "project")
 }
 
-type Log @entity {
+type Product @entity {
   id: ID!
-  type: String!
-  team: String
-  project: String
-  license: String
-  member: String
-  sender: String
-  createdAt: Int
+  project: Project!
+  token: String!
+  price: BigInt!
+  balance: BigInt!
+}
+
+type Purchase @entity {
+  id: ID!
+  user: User!
+  project: Project!
+  product: Product!
+  price: BigInt!
+}
+
+type User @entity {
+  id: ID!
+  products: [Product!]!
+  purchases: [Purchase!]! @derivedFrom(field: "user")
 }

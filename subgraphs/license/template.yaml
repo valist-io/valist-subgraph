@@ -14,14 +14,17 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Team
-        - Project
-        - Release
-        - Log
+        - Product
+        - Price
+        - User
       abis:
         - name: License
           file: ./abis/License.json
       eventHandlers:
-        - event: LicenseCreated(string,string,string,uint256,uint256)
-          handler: handleLicenseCreated
+        - event: PriceChanged(uint256,address,uint256,address)
+          handler: handlePriceChanged
+        - event: BalanceWithdrawn(uint256,address,uint256,address,address)
+          handler: handleBalanceWithdrawn
+        - event: ProductPurchased(uint256,address,uint256,address,address)
+          handler: handleProductPurchased
       file: ./src/mapping.ts

@@ -1,11 +1,12 @@
-type Team @entity {
+type Account @entity {
   id: ID!
   name: String!
   metaURI: String!
+  beneficiary: String!
   members: [User!]!
-  projects: [Project!]! @derivedFrom(field: "team")
-  createdTx: String!
-  updatedTx: String!
+  projects: [Project!]! @derivedFrom(field: "account")
+  blockNumber: BigInt
+  logIndex: BigInt
 }
 
 type Project @entity {
@@ -13,11 +14,10 @@ type Project @entity {
   name: String!
   metaURI: String!
   members: [User!]!
-  team: Team!
+  account: Account!
   releases: [Release!]! @derivedFrom(field: "project")
-  createdTx: String!
-  updatedTx: String!
-  createdAt: Int!
+  blockNumber: BigInt
+  logIndex: BigInt
 }
 
 type Release @entity {
@@ -25,28 +25,25 @@ type Release @entity {
   name: String!
   metaURI: String!
   project: Project!
-  approvers: [User!]!
-  rejectors: [User!]!
-  createdTx: String!
-  updatedTx: String!
-  createdAt: Int!
+  signers: [User!]!
+  blockNumber: BigInt
+  logIndex: BigInt
 }
 
 type User @entity {
   id: ID!
-  teams: [Team!]!
+  accounts: [Account!]!
   projects: [Project!]!
-  approved: [Release!]!
-  rejected: [Release!]!
 }
 
 type Log @entity {
   id: ID!
   type: String!
-  team: String
-  project: String
-  release: String
+  account: Account
+  project: Project
+  release: Release
   member: String
   sender: String
-  createdAt: Int
+  blockNumber: BigInt
+  logIndex: BigInt
 }
