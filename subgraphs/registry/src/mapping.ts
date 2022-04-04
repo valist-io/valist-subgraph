@@ -5,7 +5,6 @@ import {
   AccountUpdated,
   AccountMemberAdded,
   AccountMemberRemoved,
-  BeneficiaryUpdated,
   ProjectCreated,
   ProjectUpdated,
   ProjectMemberAdded,
@@ -20,7 +19,6 @@ export function handleAccountCreated(event: AccountCreated): void {
   const account = new Account(accountID);
   account.name = event.params._name;
   account.metaURI = event.params._metaURI;
-  account.beneficiary = event.params._beneficiary.toHex();
   account.logIndex = event.logIndex;
   account.blockNumber = event.block.number;
   account.save();
@@ -106,23 +104,6 @@ export function handleAccountMemberRemoved(event: AccountMemberRemoved): void {
   log.account = accountID;
   log.sender = event.params._sender.toHex();
   log.member = event.params._member.toHex();
-  log.logIndex = event.logIndex;
-  log.blockNumber = event.block.number;
-  log.save();
-}
-
-export function handleBeneficiaryUpdated(event: BeneficiaryUpdated): void {
-  const accountID = _toPaddedHex(event.params._accountID);
-  const account = Account.load(accountID);
-  if (account === null) return;
-
-  account.beneficiary = event.params._beneficiary.toHex();
-  account.save();
-
-  const log = new Log(event.transaction.hash.toHex());
-  log.type = 'BeneficiaryUpdated';
-  log.account = accountID;
-  log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
   log.blockNumber = event.block.number;
   log.save();

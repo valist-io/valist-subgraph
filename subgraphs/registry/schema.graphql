@@ -2,7 +2,6 @@ type Account @entity {
   id: ID!
   name: String!
   metaURI: String!
-  beneficiary: String!
   members: [User!]!
   projects: [Project!]! @derivedFrom(field: "account")
   blockNumber: BigInt

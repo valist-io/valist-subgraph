@@ -30,8 +30,6 @@ dataSources:
           handler: handleAccountMemberAdded
         - event: AccountMemberRemoved(uint256,address,address)
           handler: handleAccountMemberRemoved
-        - event: BeneficiaryUpdated(uint256,address,address)
-          handler: handleBeneficiaryUpdated
         - event: ProjectCreated(uint256,uint256,string,string,address)
           handler: handleProjectCreated
         - event: ProjectUpdated(uint256,string,address)
