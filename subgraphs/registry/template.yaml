@@ -22,10 +22,10 @@ dataSources:
         - name: Registry
           file: ./abis/Registry.json
       eventHandlers:
-        - event: AccountCreated(uint256,string,string,address,address)
+        - event: AccountCreated(uint256,string,string,address)
           handler: handleAccountCreated
         - event: AccountUpdated(uint256,string,address)
-          handler: handleAccountUpdate
+          handler: handleAccountUpdated
         - event: AccountMemberAdded(uint256,address,address)
           handler: handleAccountMemberAdded
         - event: AccountMemberRemoved(uint256,address,address)
