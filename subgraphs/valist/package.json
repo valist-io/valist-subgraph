@@ -6,7 +6,7 @@
     "build": "npm run prepare:ganache && graph build",
     "deploy:ganache": "npm run prepare:ganache && npm run create-local && npm run deploy-local",
     "deploy:mumbai": "npm run prepare:mumbai && graph deploy --node https://api.thegraph.com/deploy/ valist-io/valist",
-    "deploy:polygon": "npm run prepare:polygon && graph deploy --node https://api.thegraph.com/deploy/ valist-io/valist",
+    "deploy:polygon": "npm run prepare:polygon && graph deploy --node https://api.thegraph.com/deploy/ valist-io/valist-registry",
     "prepare:ganache": "mustache config/ganache.json template.yaml > subgraph.yaml",
     "prepare:mumbai": "mustache config/mumbai.json template.yaml > subgraph.yaml",
     "prepare:polygon": "mustache config/polygon.json template.yaml > subgraph.yaml",

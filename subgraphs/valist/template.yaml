@@ -25,7 +25,7 @@ dataSources:
         - event: TeamCreated(string,string,address)
           handler: handleTeamCreated
         - event: TeamUpdated(string,string,address)
-          handler: handleTeamUpdate
+          handler: handleTeamUpdated
         - event: TeamMemberAdded(string,address,address)
           handler: handleTeamMemberAdded
         - event: TeamMemberRemoved(string,address,address)
