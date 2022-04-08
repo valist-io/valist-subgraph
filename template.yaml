@@ -6,9 +6,9 @@ dataSources:
     name: Registry
     network: {{network}}
     source:
-      address: "{{address}}"
+      address: "{{registry.address}}"
       abi: Registry
-      startBlock: {{startBlock}}
+      startBlock: {{registry.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -44,4 +44,30 @@ dataSources:
           handler: handleReleaseApproved
         - event: ReleaseRevoked(uint256,address)
           handler: handleReleaseRevoked
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: License
+    network: {{network}}
+    source:
+      address: "{{license.address}}"
+      abi: License
+      startBlock: {{license.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Product
+        - Price
+        - User
+      abis:
+        - name: License
+          file: ./abis/License.json
+      eventHandlers:
+        - event: PriceChanged(uint256,address,uint256,address)
+          handler: handlePriceChanged
+        - event: BalanceWithdrawn(uint256,address,uint256,address,address)
+          handler: handleBalanceWithdrawn
+        - event: ProductPurchased(uint256,address,uint256,address,address)
+          handler: handleProductPurchased
       file: ./src/mapping.ts

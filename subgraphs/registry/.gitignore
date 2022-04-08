@@ -1,6 +1,0 @@
-build
-generated
-
-# ignore generated subgraph config
-subgraph.yaml
-

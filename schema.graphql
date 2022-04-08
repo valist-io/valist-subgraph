@@ -15,6 +15,8 @@ type Project @entity {
   members: [User!]!
   account: Account!
   releases: [Release!]! @derivedFrom(field: "project")
+  products: [Product!]! @derivedFrom(field: "project")
+  purchases: [Purchase!]! @derivedFrom(field: "project")
   blockNumber: BigInt
   logIndex: BigInt
 }
@@ -29,10 +31,28 @@ type Release @entity {
   logIndex: BigInt
 }
 
+type Product @entity {
+  id: ID!
+  project: Project!
+  token: String!
+  price: BigInt!
+  balance: BigInt!
+}
+
+type Purchase @entity {
+  id: ID!
+  user: User!
+  project: Project!
+  product: Product!
+  price: BigInt!
+}
+
 type User @entity {
   id: ID!
   accounts: [Account!]!
   projects: [Project!]!
+  products: [Product!]!
+  purchases: [Purchase!]! @derivedFrom(field: "user")
 }
 
 type Log @entity {

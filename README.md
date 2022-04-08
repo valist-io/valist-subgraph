@@ -1,6 +1,6 @@
 # Valist Subgraph
 
-This repo contains the Valist subgraphs. Each subgraph is a package located in the `subgraphs` directory.
+This repo contains the Valist subgraph.
 
 ## Development
 
@@ -17,13 +17,11 @@ git clone https://github.com/valist-io/valist-subgraph
 
 cd valist-subgraph
 
-lerna bootstrap
+npm run codegen
 
-lerna run codegen
+npm run build
 
-lerna run build
-
-lerna run deploy:ganache
+npm run deploy:ganache
 ```
 
 ## Contributing
