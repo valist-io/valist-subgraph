@@ -17,6 +17,7 @@ dataSources:
         - Account
         - Project
         - Release
+        - User
         - Log
       abis:
         - name: Registry
@@ -44,7 +45,7 @@ dataSources:
           handler: handleReleaseApproved
         - event: ReleaseRevoked(uint256,address)
           handler: handleReleaseRevoked
-      file: ./src/mapping.ts
+      file: ./src/registry.ts
   - kind: ethereum/contract
     name: License
     network: {{network}}
@@ -57,8 +58,10 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
+        - Project
         - Product
-        - Price
+        - Currency
+        - Purchase
         - User
       abis:
         - name: License
@@ -66,8 +69,12 @@ dataSources:
       eventHandlers:
         - event: PriceChanged(uint256,address,uint256,address)
           handler: handlePriceChanged
+        - event: RoyaltyChanged(uint256,address,uint256,address)
+          handler: handleRoyaltyChanged
+        - event: LimitChanged(uint256,uint256,address)
+          handler: handleLimitChanged
         - event: BalanceWithdrawn(uint256,address,uint256,address,address)
           handler: handleBalanceWithdrawn
         - event: ProductPurchased(uint256,address,uint256,address,address)
           handler: handleProductPurchased
-      file: ./src/mapping.ts
+      file: ./src/license.ts

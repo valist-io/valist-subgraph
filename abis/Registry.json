@@ -490,6 +490,44 @@
         "type": "uint256"
       }
     ],
+    "name": "getLatestReleaseID",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_releaseID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPreviousReleaseID",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_projectID",
+        "type": "uint256"
+      }
+    ],
     "name": "getProjectAccountID",
     "outputs": [
       {

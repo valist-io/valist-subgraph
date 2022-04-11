@@ -4,6 +4,7 @@ type Account @entity {
   metaURI: String!
   members: [User!]!
   projects: [Project!]! @derivedFrom(field: "account")
+  logs: [Log!]! @derivedFrom(field: "account")
   blockNumber: BigInt
   logIndex: BigInt
 }
@@ -15,8 +16,8 @@ type Project @entity {
   members: [User!]!
   account: Account!
   releases: [Release!]! @derivedFrom(field: "project")
-  products: [Product!]! @derivedFrom(field: "project")
-  purchases: [Purchase!]! @derivedFrom(field: "project")
+  product: Product
+  logs: [Log!]! @derivedFrom(field: "project")
   blockNumber: BigInt
   logIndex: BigInt
 }
@@ -27,6 +28,7 @@ type Release @entity {
   metaURI: String!
   project: Project!
   signers: [User!]!
+  logs: [Log!]! @derivedFrom(field: "release")
   blockNumber: BigInt
   logIndex: BigInt
 }
@@ -34,25 +36,35 @@ type Release @entity {
 type Product @entity {
   id: ID!
   project: Project!
+  limit: BigInt!
+  supply: BigInt!
+  royaltyAmount: BigInt!
+  royaltyRecipient: String!
+  currencies: [Currency!]! @derivedFrom(field: "product")
+  purchases: [Purchase!]! @derivedFrom(field: "product")
+}
+
+type Currency @entity {
+  id: ID!
   token: String!
+  product: Product!
   price: BigInt!
   balance: BigInt!
 }
 
 type Purchase @entity {
   id: ID!
-  user: User!
-  project: Project!
+  recipient: String!
   product: Product!
   price: BigInt!
+  blockNumber: BigInt
+  logIndex: BigInt
 }
 
 type User @entity {
   id: ID!
   accounts: [Account!]!
   projects: [Project!]!
-  products: [Product!]!
-  purchases: [Purchase!]! @derivedFrom(field: "user")
 }
 
 type Log @entity {
@@ -61,7 +73,6 @@ type Log @entity {
   account: Account
   project: Project
   release: Release
-  member: String
   sender: String
   blockNumber: BigInt
   logIndex: BigInt

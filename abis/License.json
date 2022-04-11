@@ -83,6 +83,31 @@
       },
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "_limit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_sender",
+        "type": "address"
+      }
+    ],
+    "name": "LimitChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_projectID",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "_token",
         "type": "address"
@@ -138,6 +163,37 @@
       }
     ],
     "name": "ProductPurchased",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_projectID",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoyaltyChanged",
     "type": "event"
   },
   {
@@ -327,6 +383,25 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_projectID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getLimit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "contract IERC20",
         "name": "_token",
         "type": "address"
@@ -357,6 +432,25 @@
       }
     ],
     "name": "getPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_projectID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getSupply",
     "outputs": [
       {
         "internalType": "uint256",
@@ -418,6 +512,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "protocolFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -472,9 +579,25 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "royaltyBasisPoints",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_projectID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_price",
+        "type": "uint256"
+      }
+    ],
+    "name": "royaltyInfo",
     "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
       {
         "internalType": "uint256",
         "name": "",
@@ -571,6 +694,24 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_projectID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "setLimit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address payable",
         "name": "_owner",
         "type": "address"
@@ -625,6 +766,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_protocolFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "setProtocolFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_registry",
         "type": "address"
@@ -639,11 +793,21 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_royaltyBasisPoints",
+        "name": "_projectID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
         "type": "uint256"
       }
     ],
-    "name": "setRoyaltyBasisPoints",
+    "name": "setRoyalty",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
