@@ -31,7 +31,7 @@ export function handleAccountCreated(event: AccountCreated): void {
   account.blockNumber = event.block.number;
   account.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'AccountCreated';
   log.account = accountID;
   log.sender = event.params._sender.toHex();
@@ -48,7 +48,7 @@ export function handleAccountUpdated(event: AccountUpdated): void {
   account.metaURI = event.params._metaURI;
   account.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'AccountUpdated';
   log.account = accountID;
   log.sender = event.params._sender.toHex();
@@ -79,7 +79,7 @@ export function handleAccountMemberAdded(event: AccountMemberAdded): void {
   account.members = members.values();
   account.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'AccountMemberAdded';
   log.account = accountID;
   log.sender = event.params._sender.toHex();
@@ -110,7 +110,7 @@ export function handleAccountMemberRemoved(event: AccountMemberRemoved): void {
   account.members = members.values();
   account.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'AccountMemberRemoved';
   log.account = accountID;
   log.sender = event.params._sender.toHex();
@@ -131,7 +131,7 @@ export function handleProjectCreated(event: ProjectCreated): void {
   project.blockNumber = event.block.number;
   project.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProjectCreated';
   log.account = accountID;
   log.project = projectID;
@@ -149,7 +149,7 @@ export function handleProjectUpdated(event: ProjectUpdated): void {
   project.metaURI = event.params._metaURI;
   project.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProjectUpdated';
   log.project = projectID;
   log.sender = event.params._sender.toHex();
@@ -180,7 +180,7 @@ export function handleProjectMemberAdded(event: ProjectMemberAdded): void {
   project.members = members.values();
   project.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProjectMemberAdded';
   log.project = projectID;
   log.sender = event.params._sender.toHex();
@@ -211,7 +211,7 @@ export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
   project.members = members.values();
   project.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProjectMemberRemoved';
   log.project = projectID;
   log.sender = event.params._sender.toHex();
@@ -232,7 +232,7 @@ export function handleReleaseCreated(event: ReleaseCreated): void {
   release.blockNumber = event.block.number;
   release.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ReleaseCreated';
   log.project = projectID;
   log.release = releaseID;
@@ -253,7 +253,7 @@ export function handleReleaseApproved(event: ReleaseApproved): void {
   release.signers = signers.values();
   release.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ReleaseApproved';
   log.release = releaseID;
   log.sender = event.params._sender.toHex();
@@ -273,7 +273,7 @@ export function handleReleaseRevoked(event: ReleaseRevoked): void {
   release.signers = signers.values();
   release.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ReleaseRevoked';
   log.release = releaseID;
   log.sender = event.params._sender.toHex();

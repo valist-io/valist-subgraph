@@ -42,7 +42,7 @@ export function handlePriceChanged(event: PriceChanged): void {
   currency.token = token;
   currency.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'PriceChanged';
   log.project = projectID;
   log.sender = event.params._sender.toHex();
@@ -68,7 +68,7 @@ export function handleRoyaltyChanged(event: RoyaltyChanged): void {
   project.product = projectID;
   project.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'RoyaltyChanged';
   log.project = projectID;
   log.sender = event.params._sender.toHex();
@@ -93,7 +93,7 @@ export function handleLimitChanged(event: LimitChanged): void {
   project.product = projectID;
   project.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'LimitChanged';
   log.project = projectID;
   log.sender = event.params._sender.toHex();
@@ -113,7 +113,7 @@ export function handleBalanceWithdrawn(event: BalanceWithdrawn): void {
   currency.balance -= event.params._balance;
   currency.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'BalanceWithdrawn';
   log.project = projectID;
   log.sender = event.params._sender.toHex();
@@ -147,7 +147,7 @@ export function handleProductPurchased(event: ProductPurchased): void {
   purchase.blockNumber = event.block.number;
   purchase.save();
 
-  const log = new Log(event.transaction.hash.toHex());
+  const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProductPurchased';
   log.project = projectID;
   log.sender = event.params._sender.toHex();
