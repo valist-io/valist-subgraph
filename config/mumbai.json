@@ -1,11 +1,11 @@
 {
 	"network": "mumbai",
 	"registry": {
-		"address": "0xC2E442A911A70097093E5d51A9224A1587D888cb",
-		"startBlock": 25813393
+		"address": "0x83B5f729DB18E2Cae6388A414210543581f9df17",
+		"startBlock": 25936829
 	},
 	"license": {
-		"address": "0x980Fb2419437e5E4B8dB2AdCD6Ff374b9Ef1b688",
-		"startBlock": 25813394
+		"address": "0xF0D58AacF271629B2c598d557E8c2FCF047FfD30",
+		"startBlock": 25936831
 	}
 }

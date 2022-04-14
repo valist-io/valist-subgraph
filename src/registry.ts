@@ -28,6 +28,7 @@ export function handleAccountCreated(event: AccountCreated): void {
   account.name = event.params._name;
   account.metaURI = event.params._metaURI;
   account.logIndex = event.logIndex;
+  account.blockTime = event.block.timestamp;
   account.blockNumber = event.block.number;
   account.save();
 
@@ -36,6 +37,7 @@ export function handleAccountCreated(event: AccountCreated): void {
   log.account = accountID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -53,6 +55,7 @@ export function handleAccountUpdated(event: AccountUpdated): void {
   log.account = accountID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -84,6 +87,7 @@ export function handleAccountMemberAdded(event: AccountMemberAdded): void {
   log.account = accountID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -115,6 +119,7 @@ export function handleAccountMemberRemoved(event: AccountMemberRemoved): void {
   log.account = accountID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -128,6 +133,7 @@ export function handleProjectCreated(event: ProjectCreated): void {
   project.account = accountID;
   project.metaURI = event.params._metaURI;
   project.logIndex = event.logIndex;
+  project.blockTime = event.block.timestamp;
   project.blockNumber = event.block.number;
   project.save();
 
@@ -137,6 +143,7 @@ export function handleProjectCreated(event: ProjectCreated): void {
   log.project = projectID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -154,6 +161,7 @@ export function handleProjectUpdated(event: ProjectUpdated): void {
   log.project = projectID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -185,6 +193,7 @@ export function handleProjectMemberAdded(event: ProjectMemberAdded): void {
   log.project = projectID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -216,6 +225,7 @@ export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
   log.project = projectID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -229,6 +239,7 @@ export function handleReleaseCreated(event: ReleaseCreated): void {
   release.project = projectID;
   release.metaURI = event.params._metaURI;
   release.logIndex = event.logIndex;
+  release.blockTime = event.block.timestamp;
   release.blockNumber = event.block.number;
   release.save();
 
@@ -238,6 +249,7 @@ export function handleReleaseCreated(event: ReleaseCreated): void {
   log.release = releaseID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -258,6 +270,7 @@ export function handleReleaseApproved(event: ReleaseApproved): void {
   log.release = releaseID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -278,6 +291,7 @@ export function handleReleaseRevoked(event: ReleaseRevoked): void {
   log.release = releaseID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }

@@ -1,79 +1,95 @@
 type Account @entity {
-  id: ID!
-  name: String!
-  metaURI: String!
-  members: [User!]!
-  projects: [Project!]! @derivedFrom(field: "account")
-  logs: [Log!]! @derivedFrom(field: "account")
+  id:          ID!
+  name:        String!
+  metaURI:     String!
+  
+  members:     [User!]!
+  projects:    [Project!]! @derivedFrom(field: "account")
+  logs:        [Log!]!     @derivedFrom(field: "account")
+  
+  blockTime:   BigInt
   blockNumber: BigInt
-  logIndex: BigInt
+  logIndex:    BigInt
 }
 
 type Project @entity {
-  id: ID!
-  name: String!
-  metaURI: String!
-  members: [User!]!
-  account: Account!
-  releases: [Release!]! @derivedFrom(field: "project")
-  product: Product
-  logs: [Log!]! @derivedFrom(field: "project")
+  id:          ID!
+  name:        String!
+  metaURI:     String!
+
+  account:     Account!
+  product:     Product
+  members:     [User!]!
+  releases:    [Release!]! @derivedFrom(field: "project")
+  logs:        [Log!]!     @derivedFrom(field: "project")
+  
+  blockTime:   BigInt
   blockNumber: BigInt
-  logIndex: BigInt
+  logIndex:    BigInt
 }
 
 type Release @entity {
-  id: ID!
-  name: String!
-  metaURI: String!
-  project: Project!
-  signers: [User!]!
-  logs: [Log!]! @derivedFrom(field: "release")
+  id:          ID!
+  name:        String!
+  metaURI:     String!
+  
+  project:     Project!
+  signers:     [User!]!
+  logs:        [Log!]! @derivedFrom(field: "release")
+  
+  blockTime:   BigInt
   blockNumber: BigInt
-  logIndex: BigInt
+  logIndex:    BigInt
 }
 
 type Product @entity {
-  id: ID!
-  project: Project!
-  limit: BigInt!
-  supply: BigInt!
-  royaltyAmount: BigInt!
+  id:               ID!
+  limit:            BigInt!
+  supply:           BigInt!
+  
+  royaltyAmount:    BigInt!
   royaltyRecipient: String!
-  currencies: [Currency!]! @derivedFrom(field: "product")
-  purchases: [Purchase!]! @derivedFrom(field: "product")
+
+  project:          Project!
+  currencies:       [Currency!]! @derivedFrom(field: "product")
+  purchases:        [Purchase!]! @derivedFrom(field: "product")
 }
 
 type Currency @entity {
-  id: ID!
-  token: String!
+  id:      ID!
+  token:   String!
   product: Product!
-  price: BigInt!
+  price:   BigInt!
   balance: BigInt!
 }
 
 type Purchase @entity {
-  id: ID!
-  recipient: String!
-  product: Product!
-  price: BigInt!
+  id:          ID!
+  recipient:   String!
+  product:     Product!
+  price:       BigInt!
+
+  blockTime:   BigInt
   blockNumber: BigInt
-  logIndex: BigInt
+  logIndex:    BigInt
 }
 
 type User @entity {
-  id: ID!
+  id:       ID!
   accounts: [Account!]!
   projects: [Project!]!
 }
 
 type Log @entity {
-  id: ID!
-  type: String!
-  account: Account
-  project: Project
-  release: Release
-  sender: String
+  id:          ID!
+  type:        String!
+  sender:      String!
+
+  account:     Account
+  project:     Project
+  release:     Release
+  
+  blockTime:   BigInt
   blockNumber: BigInt
-  logIndex: BigInt
+  logIndex:    BigInt
 }

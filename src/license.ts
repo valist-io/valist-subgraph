@@ -47,6 +47,7 @@ export function handlePriceChanged(event: PriceChanged): void {
   log.project = projectID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -73,6 +74,7 @@ export function handleRoyaltyChanged(event: RoyaltyChanged): void {
   log.project = projectID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -98,6 +100,7 @@ export function handleLimitChanged(event: LimitChanged): void {
   log.project = projectID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -118,6 +121,7 @@ export function handleBalanceWithdrawn(event: BalanceWithdrawn): void {
   log.project = projectID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
@@ -152,6 +156,7 @@ export function handleProductPurchased(event: ProductPurchased): void {
   log.project = projectID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
+  log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
 }
