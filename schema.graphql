@@ -83,7 +83,9 @@ type User @entity {
 type Log @entity {
   id:          ID!
   type:        String!
+  
   sender:      String!
+  member:      String
 
   account:     Account
   project:     Project

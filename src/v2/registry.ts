@@ -1,31 +1,41 @@
-import { toPaddedHex } from "./common";
+import { BigInt } from "@graphprotocol/graph-ts";
+import { toPaddedHex } from "../common";
 
-import {
+import { 
   Account, 
   Release, 
   Project, 
   User, 
   Log 
-} from "../generated/schema";
+} from "../../generated/schema";
 
 import {
-  AccountCreated,
-  AccountUpdated,
-  AccountMemberAdded,
-  AccountMemberRemoved,
+  Registry,
+  TeamCreated,
+  TeamUpdated,
+  TeamMemberAdded,
+  TeamMemberRemoved,
   ProjectCreated,
   ProjectUpdated,
   ProjectMemberAdded,
   ProjectMemberRemoved,
   ReleaseCreated,
   ReleaseApproved,
-  ReleaseRevoked
-} from "../generated/Registry/Registry";
+  ReleaseRejected
+} from "../../generated/v2/Registry/Registry";
 
-export function handleAccountCreated(event: AccountCreated): void {
-  const accountID = toPaddedHex(event.params._accountID);
+// set to the deployed block of v2.1 migration
+const migrationBlockNumber = BigInt.fromU64(25936829);
+
+export function handleTeamCreated(event: TeamCreated): void {
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+
+  const accountID = toPaddedHex(_accountID);
   const account = new Account(accountID);
-  account.name = event.params._name;
+  account.name = event.params._teamName;
   account.metaURI = event.params._metaURI;
   account.logIndex = event.logIndex;
   account.blockTime = event.block.timestamp;
@@ -42,8 +52,13 @@ export function handleAccountCreated(event: AccountCreated): void {
   log.save();
 }
 
-export function handleAccountUpdated(event: AccountUpdated): void {
-  const accountID = toPaddedHex(event.params._accountID);
+export function handleTeamUpdated(event: TeamUpdated): void {
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+
+  const accountID = toPaddedHex(_accountID);
   const account = Account.load(accountID);
   if (account === null) return;
 
@@ -60,15 +75,20 @@ export function handleAccountUpdated(event: AccountUpdated): void {
   log.save();
 }
 
-export function handleAccountMemberAdded(event: AccountMemberAdded): void {
-  const accountID = toPaddedHex(event.params._accountID);
+export function handleTeamMemberAdded(event: TeamMemberAdded): void {
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+
+  const accountID = toPaddedHex(_accountID);
   const userID = event.params._member.toHex();
 
   const account = Account.load(accountID);
   if (account === null) return;
 
   let user = User.load(userID);
-  if (user === null) user = new User(userID);
+  if (user == null) user = new User(userID);
 
   const accounts = user.accounts.reduce((s, v) => s.add(v), new Set<string>());
   accounts.add(accountID);
@@ -85,6 +105,7 @@ export function handleAccountMemberAdded(event: AccountMemberAdded): void {
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'AccountMemberAdded';
   log.account = accountID;
+  log.member = userID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
   log.blockTime = event.block.timestamp;
@@ -92,15 +113,20 @@ export function handleAccountMemberAdded(event: AccountMemberAdded): void {
   log.save();
 }
 
-export function handleAccountMemberRemoved(event: AccountMemberRemoved): void {
-  const accountID = toPaddedHex(event.params._accountID);
+export function handleTeamMemberRemoved(event: TeamMemberRemoved): void {
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+
+  const accountID = toPaddedHex(_accountID);
   const userID = event.params._member.toHex();
 
   const account = Account.load(accountID);
   if (account === null) return;
 
   let user = User.load(userID);
-  if (user === null) user = new User(userID);
+  if (user == null) user = new User(userID);
 
   const accounts = user.accounts.reduce((s, v) => s.add(v), new Set<string>());
   accounts.delete(accountID);
@@ -117,6 +143,7 @@ export function handleAccountMemberRemoved(event: AccountMemberRemoved): void {
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'AccountMemberRemoved';
   log.account = accountID;
+  log.member = userID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
   log.blockTime = event.block.timestamp;
@@ -125,11 +152,17 @@ export function handleAccountMemberRemoved(event: AccountMemberRemoved): void {
 }
 
 export function handleProjectCreated(event: ProjectCreated): void {
-  const accountID = toPaddedHex(event.params._accountID);
-  const projectID = toPaddedHex(event.params._projectID);
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+  const _projectID = registry.getProjectID(_accountID, event.params._projectName);
+  
+  const accountID = toPaddedHex(_accountID);
+  const projectID = toPaddedHex(_projectID);
 
   const project = new Project(projectID);
-  project.name = event.params._name;
+  project.name = event.params._projectName;
   project.account = accountID;
   project.metaURI = event.params._metaURI;
   project.logIndex = event.logIndex;
@@ -149,7 +182,15 @@ export function handleProjectCreated(event: ProjectCreated): void {
 }
 
 export function handleProjectUpdated(event: ProjectUpdated): void {
-  const projectID = toPaddedHex(event.params._projectID);
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+  const _projectID = registry.getProjectID(_accountID, event.params._projectName);
+  
+  const accountID = toPaddedHex(_accountID);
+  const projectID = toPaddedHex(_projectID);
+
   const project = Project.load(projectID);
   if (project === null) return;
 
@@ -167,7 +208,14 @@ export function handleProjectUpdated(event: ProjectUpdated): void {
 }
 
 export function handleProjectMemberAdded(event: ProjectMemberAdded): void {
-  const projectID = toPaddedHex(event.params._projectID);
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+  const _projectID = registry.getProjectID(_accountID, event.params._projectName);
+
+  const accountID = toPaddedHex(_accountID);
+  const projectID = toPaddedHex(_projectID);
   const userID = event.params._member.toHex();
 
   const project = Project.load(projectID);
@@ -191,6 +239,7 @@ export function handleProjectMemberAdded(event: ProjectMemberAdded): void {
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProjectMemberAdded';
   log.project = projectID;
+  log.member = userID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
   log.blockTime = event.block.timestamp;
@@ -199,7 +248,14 @@ export function handleProjectMemberAdded(event: ProjectMemberAdded): void {
 }
 
 export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
-  const projectID = toPaddedHex(event.params._projectID);
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+  const _projectID = registry.getProjectID(_accountID, event.params._projectName);
+
+  const accountID = toPaddedHex(_accountID);
+  const projectID = toPaddedHex(_projectID);
   const userID = event.params._member.toHex();
 
   const project = Project.load(projectID);
@@ -223,6 +279,7 @@ export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProjectMemberRemoved';
   log.project = projectID;
+  log.member = userID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
   log.blockTime = event.block.timestamp;
@@ -231,11 +288,19 @@ export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
 }
 
 export function handleReleaseCreated(event: ReleaseCreated): void {
-  const projectID = toPaddedHex(event.params._projectID);
-  const releaseID = toPaddedHex(event.params._releaseID);
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+  const _projectID = registry.getProjectID(_accountID, event.params._projectName);
+  const _releaseID = registry.getReleaseID(_projectID, event.params._releaseName);
+
+  const accountID = toPaddedHex(_accountID);
+  const projectID = toPaddedHex(_projectID);
+  const releaseID = toPaddedHex(_releaseID);
 
   const release = new Release(releaseID);
-  release.name = event.params._name;
+  release.name = event.params._releaseName;
   release.project = projectID;
   release.metaURI = event.params._metaURI;
   release.logIndex = event.logIndex;
@@ -255,7 +320,14 @@ export function handleReleaseCreated(event: ReleaseCreated): void {
 }
 
 export function handleReleaseApproved(event: ReleaseApproved): void {
-  const releaseID = toPaddedHex(event.params._releaseID);
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+  const _projectID = registry.getProjectID(_accountID, event.params._projectName);
+  const _releaseID = registry.getReleaseID(_projectID, event.params._releaseName);
+
+  const releaseID = toPaddedHex(_releaseID);
   const release = Release.load(releaseID);
   if (release === null) return;
 
@@ -275,8 +347,15 @@ export function handleReleaseApproved(event: ReleaseApproved): void {
   log.save();
 }
 
-export function handleReleaseRevoked(event: ReleaseRevoked): void {
-  const releaseID = toPaddedHex(event.params._releaseID);
+export function handleReleaseRejected(event: ReleaseRejected): void {
+  if (event.block.number >= migrationBlockNumber) return;
+
+  const registry = Registry.bind(event.address);
+  const _accountID = registry.getTeamID(event.params._teamName);
+  const _projectID = registry.getProjectID(_accountID, event.params._projectName);
+  const _releaseID = registry.getReleaseID(_projectID, event.params._releaseName);
+
+  const releaseID = toPaddedHex(_releaseID);
   const release = Release.load(releaseID);
   if (release === null) return;
 

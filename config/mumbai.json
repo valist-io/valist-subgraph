@@ -1,11 +1,21 @@
 {
-	"network": "mumbai",
-	"registry": {
-		"address": "0x83B5f729DB18E2Cae6388A414210543581f9df17",
-		"startBlock": 25936829
-	},
-	"license": {
-		"address": "0xF0D58AacF271629B2c598d557E8c2FCF047FfD30",
-		"startBlock": 25936831
-	}
+  "network": "ganache",
+  "v2": {
+    "0": {
+      "registry": {
+        "address": "0x9569bEb0Eba900495cF58028DB094D824d0AE850",
+        "startBlock": 24557788
+      }
+    },
+    "1": {
+      "registry": {
+        "address": "0x83B5f729DB18E2Cae6388A414210543581f9df17",
+        "startBlock": 25936829
+      },
+      "license": {
+        "address": "0xF0D58AacF271629B2c598d557E8c2FCF047FfD30",
+        "startBlock": 25936831
+      }
+    }
+  }
 }

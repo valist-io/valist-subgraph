@@ -1,5 +1,5 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { toPaddedHex } from "./common";
+import { toPaddedHex } from "../common";
 
 import { 
   Project, 
@@ -7,7 +7,7 @@ import {
   Currency,
   Purchase,
   Log
-} from "../generated/schema";
+} from "../../generated/schema";
 
 import { 
   PriceChanged,
@@ -15,7 +15,7 @@ import {
   LimitChanged,
   BalanceWithdrawn,
   ProductPurchased,
-} from "../generated/License/License";
+} from "../../generated/v2.1/License/License";
 
 export function handlePriceChanged(event: PriceChanged): void {
   const projectID = toPaddedHex(event.params._projectID);
