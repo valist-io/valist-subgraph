@@ -4,17 +4,17 @@
     "0": {
       "registry": {
         "address": "0xc70A069eC7F887a7497a4bdC7bE666C1e18c8DC3",
-		"startBlock": 25580620
+		    "startBlock": 25580620
       }
     },
     "1": {
       "registry": {
         "address": "0xC2E442A911A70097093E5d51A9224A1587D888cb",
-		"startBlock": 25813393
+		    "startBlock": 25813393
       },
       "license": {
         "address": "0x980Fb2419437e5E4B8dB2AdCD6Ff374b9Ef1b688",
-		"startBlock": 25813394
+		    "startBlock": 25813394
       }
     }
   }
