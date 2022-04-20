@@ -13,15 +13,16 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
+      file: ./src/v2.1/registry.ts
+      abis:
+        - name: Registry
+          file: ./abis/v2.1/Registry.json
       entities:
         - Account
         - Project
         - Release
         - User
         - Log
-      abis:
-        - name: Registry
-          file: ./abis/v2.1/Registry.json
       eventHandlers:
         - event: AccountCreated(uint256,string,string,address)
           handler: handleAccountCreated
@@ -45,7 +46,6 @@ dataSources:
           handler: handleReleaseApproved
         - event: ReleaseRevoked(uint256,address)
           handler: handleReleaseRevoked
-      file: ./src/v2.1/registry.ts
   - kind: ethereum/contract
     name: v2.1/License
     network: {{network}}
@@ -57,15 +57,16 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
+      file: ./src/v2.1/license.ts
+      abis:
+        - name: License
+          file: ./abis/v2.1/License.json
       entities:
         - Project
         - Product
         - Currency
         - Purchase
         - User
-      abis:
-        - name: License
-          file: ./abis/v2.1/License.json
       eventHandlers:
         - event: PriceChanged(uint256,address,uint256,address)
           handler: handlePriceChanged
@@ -77,7 +78,6 @@ dataSources:
           handler: handleBalanceWithdrawn
         - event: ProductPurchased(uint256,address,uint256,address,address)
           handler: handleProductPurchased
-      file: ./src/v2.1/license.ts
   - kind: ethereum/contract
     name: v2/Registry
     network: {{network}}
@@ -89,15 +89,16 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
+      file: ./src/v2/registry.ts
+      abis:
+        - name: Registry
+          file: ./abis/v2/Registry.json
       entities:
         - Account
         - Project
         - Release
         - User
         - Log
-      abis:
-        - name: Registry
-          file: ./abis/v2/Registry.json
       eventHandlers:
         - event: TeamCreated(string,string,address)
           handler: handleTeamCreated
@@ -121,4 +122,3 @@ dataSources:
           handler: handleReleaseApproved
         - event: ReleaseRejected(string,string,string,address)
           handler: handleReleaseRejected
-      file: ./src/v2/registry.ts

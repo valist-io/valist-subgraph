@@ -1,5 +1,5 @@
 {
-  "network": "ganache",
+  "network": "matic",
   "v2": {
     "0": {
       "registry": {

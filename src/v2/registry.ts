@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+import { BigInt, dataSource } from "@graphprotocol/graph-ts";
 import { toPaddedHex } from "../common";
 
 import { 
@@ -24,11 +24,8 @@ import {
   ReleaseRejected
 } from "../../generated/v2/Registry/Registry";
 
-// set to the deployed block of v2.1 migration
-const migrationBlockNumber = BigInt.fromU64(25936829);
-
 export function handleTeamCreated(event: TeamCreated): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -53,7 +50,7 @@ export function handleTeamCreated(event: TeamCreated): void {
 }
 
 export function handleTeamUpdated(event: TeamUpdated): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -76,7 +73,7 @@ export function handleTeamUpdated(event: TeamUpdated): void {
 }
 
 export function handleTeamMemberAdded(event: TeamMemberAdded): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -114,7 +111,7 @@ export function handleTeamMemberAdded(event: TeamMemberAdded): void {
 }
 
 export function handleTeamMemberRemoved(event: TeamMemberRemoved): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -152,7 +149,7 @@ export function handleTeamMemberRemoved(event: TeamMemberRemoved): void {
 }
 
 export function handleProjectCreated(event: ProjectCreated): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -182,7 +179,7 @@ export function handleProjectCreated(event: ProjectCreated): void {
 }
 
 export function handleProjectUpdated(event: ProjectUpdated): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -208,7 +205,7 @@ export function handleProjectUpdated(event: ProjectUpdated): void {
 }
 
 export function handleProjectMemberAdded(event: ProjectMemberAdded): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -248,7 +245,7 @@ export function handleProjectMemberAdded(event: ProjectMemberAdded): void {
 }
 
 export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -288,7 +285,7 @@ export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
 }
 
 export function handleReleaseCreated(event: ReleaseCreated): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -320,7 +317,7 @@ export function handleReleaseCreated(event: ReleaseCreated): void {
 }
 
 export function handleReleaseApproved(event: ReleaseApproved): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -348,7 +345,7 @@ export function handleReleaseApproved(event: ReleaseApproved): void {
 }
 
 export function handleReleaseRejected(event: ReleaseRejected): void {
-  if (event.block.number >= migrationBlockNumber) return;
+  if (isMigrated(event.block.number)) return;
 
   const registry = Registry.bind(event.address);
   const _accountID = registry.getTeamID(event.params._teamName);
@@ -373,4 +370,15 @@ export function handleReleaseRejected(event: ReleaseRejected): void {
   log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
+}
+
+function isMigrated(blockNumber: BigInt): boolean {
+  const network = dataSource.network();
+  if (network === 'mumbai') {
+    return blockNumber >= BigInt.fromU64(25936829);
+  }
+  if (network === 'matic') {
+    return blockNumber >= BigInt.fromU64(25936829);
+  }
+  return false;
 }

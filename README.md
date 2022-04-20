@@ -8,7 +8,6 @@ This repo contains the Valist subgraph.
 
 * node >= 14.17
 * npm >= 6.14
-* lerna
 
 ### Setup
 
@@ -16,10 +15,6 @@ This repo contains the Valist subgraph.
 git clone https://github.com/valist-io/valist-subgraph
 
 cd valist-subgraph
-
-npm run codegen
-
-npm run build
 
 npm run deploy:ganache
 ```
