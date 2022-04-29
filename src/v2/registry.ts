@@ -85,13 +85,13 @@ export function handleTeamMemberAdded(event: TeamMemberAdded): void {
   if (account === null) return;
 
   let user = User.load(userID);
-  if (user == null) user = new User(userID);
+  if (user === null) user = new User(userID);
 
   const accounts = user.accounts.reduce((s, v) => s.add(v), new Set<string>());
   accounts.add(accountID);
 
   const members = account.members.reduce((s, v) => s.add(v), new Set<string>());
-  members.add(event.params._member.toHex());
+  members.add(userID);
 
   user.accounts = accounts.values();
   user.save();
@@ -123,13 +123,13 @@ export function handleTeamMemberRemoved(event: TeamMemberRemoved): void {
   if (account === null) return;
 
   let user = User.load(userID);
-  if (user == null) user = new User(userID);
+  if (user === null) user = new User(userID);
 
   const accounts = user.accounts.reduce((s, v) => s.add(v), new Set<string>());
   accounts.delete(accountID);
 
   const members = account.members.reduce((s, v) => s.add(v), new Set<string>());;
-  members.delete(event.params._member.toHex());
+  members.delete(userID);
 
   user.accounts = accounts.values();
   user.save();

@@ -191,7 +191,7 @@ export function handleProjectMemberAdded(event: ProjectMemberAdded): void {
   projects.add(projectID);
 
   const members = project.members.reduce((s, v) => s.add(v), new Set<string>());
-  members.add(event.params._member.toHex());
+  members.add(userID);
 
   user.projects = projects.values();
   user.save();
@@ -224,7 +224,7 @@ export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
   projects.delete(projectID);
 
   const members = project.members.reduce((s, v) => s.add(v), new Set<string>());
-  members.delete(event.params._member.toHex());
+  members.delete(userID);
 
   user.projects = projects.values();
   user.save();
