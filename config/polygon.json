@@ -9,12 +9,12 @@
     },
     "1": {
       "registry": {
-        "address": "0xC2E442A911A70097093E5d51A9224A1587D888cb",
-		    "startBlock": 25813393
+        "address": "0xD504d012D78B81fA27288628f3fC89B0e2f56e24",
+		    "startBlock": 27729588
       },
       "license": {
-        "address": "0x980Fb2419437e5E4B8dB2AdCD6Ff374b9Ef1b688",
-		    "startBlock": 25813394
+        "address": "0x3cE643dc61bb40bB0557316539f4A93016051b81",
+		    "startBlock":   27729677
       }
     }
   }

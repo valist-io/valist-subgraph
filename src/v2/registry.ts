@@ -378,7 +378,7 @@ function isMigrated(blockNumber: BigInt): boolean {
     return blockNumber >= BigInt.fromU64(25936829);
   }
   if (network === 'matic') {
-    return blockNumber >= BigInt.fromU64(25936829);
+    return blockNumber >= BigInt.fromU64(27729588);
   }
   return false;
 }
