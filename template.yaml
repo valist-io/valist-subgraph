@@ -1,0 +1,124 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: v2.1/Registry
+    network: {{network}}
+    source:
+      address: "{{v2.1.registry.address}}"
+      abi: Registry
+      startBlock: {{v2.1.registry.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/v2.1/registry.ts
+      abis:
+        - name: Registry
+          file: ./abis/v2.1/Registry.json
+      entities:
+        - Account
+        - Project
+        - Release
+        - User
+        - Log
+      eventHandlers:
+        - event: AccountCreated(uint256,string,string,address)
+          handler: handleAccountCreated
+        - event: AccountUpdated(uint256,string,address)
+          handler: handleAccountUpdated
+        - event: AccountMemberAdded(uint256,address,address)
+          handler: handleAccountMemberAdded
+        - event: AccountMemberRemoved(uint256,address,address)
+          handler: handleAccountMemberRemoved
+        - event: ProjectCreated(uint256,uint256,string,string,address)
+          handler: handleProjectCreated
+        - event: ProjectUpdated(uint256,string,address)
+          handler: handleProjectUpdated
+        - event: ProjectMemberAdded(uint256,address,address)
+          handler: handleProjectMemberAdded
+        - event: ProjectMemberRemoved(uint256,address,address)
+          handler: handleProjectMemberRemoved
+        - event: ReleaseCreated(uint256,uint256,string,string,address)
+          handler: handleReleaseCreated
+        - event: ReleaseApproved(uint256,address)
+          handler: handleReleaseApproved
+        - event: ReleaseRevoked(uint256,address)
+          handler: handleReleaseRevoked
+  - kind: ethereum/contract
+    name: v2.1/License
+    network: {{network}}
+    source:
+      address: "{{v2.1.license.address}}"
+      abi: License
+      startBlock: {{v2.1.license.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/v2.1/license.ts
+      abis:
+        - name: License
+          file: ./abis/v2.1/License.json
+      entities:
+        - Project
+        - Product
+        - Currency
+        - Purchase
+        - User
+      eventHandlers:
+        - event: PriceChanged(uint256,address,uint256,address)
+          handler: handlePriceChanged
+        - event: RoyaltyChanged(uint256,address,uint256,address)
+          handler: handleRoyaltyChanged
+        - event: LimitChanged(uint256,uint256,address)
+          handler: handleLimitChanged
+        - event: BalanceWithdrawn(uint256,address,uint256,address,address)
+          handler: handleBalanceWithdrawn
+        - event: ProductPurchased(uint256,address,uint256,address,address)
+          handler: handleProductPurchased
+  - kind: ethereum/contract
+    name: v2/Registry
+    network: {{network}}
+    source:
+      address: "{{v2.0.registry.address}}"
+      abi: Registry
+      startBlock: {{v2.0.registry.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/v2/registry.ts
+      abis:
+        - name: Registry
+          file: ./abis/v2/Registry.json
+      entities:
+        - Account
+        - Project
+        - Release
+        - User
+        - Log
+      eventHandlers:
+        - event: TeamCreated(string,string,address)
+          handler: handleTeamCreated
+        - event: TeamUpdated(string,string,address)
+          handler: handleTeamUpdated
+        - event: TeamMemberAdded(string,address,address)
+          handler: handleTeamMemberAdded
+        - event: TeamMemberRemoved(string,address,address)
+          handler: handleTeamMemberRemoved
+        - event: ProjectCreated(string,string,string,address)
+          handler: handleProjectCreated
+        - event: ProjectUpdated(string,string,string,address)
+          handler: handleProjectUpdated
+        - event: ProjectMemberAdded(string,string,address,address)
+          handler: handleProjectMemberAdded
+        - event: ProjectMemberRemoved(string,string,address,address)
+          handler: handleProjectMemberRemoved
+        - event: ReleaseCreated(string,string,string,string,address)
+          handler: handleReleaseCreated
+        - event: ReleaseApproved(string,string,string,address)
+          handler: handleReleaseApproved
+        - event: ReleaseRejected(string,string,string,address)
+          handler: handleReleaseRejected
