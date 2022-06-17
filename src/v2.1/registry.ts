@@ -57,6 +57,7 @@ export function handleAccountUpdated(event: AccountUpdated): void {
 
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'AccountUpdated';
+  log.accountID = accountID;
   log.account = accountID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
@@ -89,6 +90,7 @@ export function handleAccountMemberAdded(event: AccountMemberAdded): void {
 
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'AccountMemberAdded';
+  log.accountID = accountID;
   log.account = accountID;
   log.member = userID;
   log.sender = event.params._sender.toHex();
@@ -122,6 +124,7 @@ export function handleAccountMemberRemoved(event: AccountMemberRemoved): void {
 
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'AccountMemberRemoved';
+  log.accountID = accountID;
   log.account = accountID;
   log.member = userID;
   log.sender = event.params._sender.toHex();
@@ -150,6 +153,7 @@ export function handleProjectCreated(event: ProjectCreated): void {
 
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProjectCreated';
+  log.accountID = accountID;
   log.account = accountID;
   log.project = projectID;
   log.sender = event.params._sender.toHex();
@@ -166,9 +170,11 @@ export function handleProjectUpdated(event: ProjectUpdated): void {
 
   project.metaURI = event.params._metaURI;
   project.save();
-
+   
+  
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProjectUpdated';
+  log.accountID = project.account;
   log.project = projectID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
@@ -201,6 +207,7 @@ export function handleProjectMemberAdded(event: ProjectMemberAdded): void {
 
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProjectMemberAdded';
+  log.accountID = project.account;
   log.project = projectID;
   log.member = userID;
   log.sender = event.params._sender.toHex();
@@ -234,6 +241,7 @@ export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
 
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ProjectMemberRemoved';
+  log.accountID = project.account;
   log.project = projectID;
   log.member = userID;
   log.sender = event.params._sender.toHex();
@@ -246,7 +254,8 @@ export function handleProjectMemberRemoved(event: ProjectMemberRemoved): void {
 export function handleReleaseCreated(event: ReleaseCreated): void {
   const projectID = toPaddedHex(event.params._projectID);
   const releaseID = toPaddedHex(event.params._releaseID);
-
+  const project = Project.load(projectID);
+  if (project === null) return;
   let release = Release.load(releaseID);
   if (release === null) {
     release = new Release(releaseID);
@@ -259,9 +268,11 @@ export function handleReleaseCreated(event: ReleaseCreated): void {
   release.project = projectID;
   release.metaURI = event.params._metaURI;
   release.save();
+   
 
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ReleaseCreated';
+  log.accountID =  project.account;
   log.project = projectID;
   log.release = releaseID;
   log.sender = event.params._sender.toHex();
@@ -275,7 +286,8 @@ export function handleReleaseApproved(event: ReleaseApproved): void {
   const releaseID = toPaddedHex(event.params._releaseID);
   const release = Release.load(releaseID);
   if (release === null) return;
-
+  const project = Project.load(release.project);
+  if (project === null) return;
   const signers = release.signers.reduce((s, v) => s.add(v), new Set<string>());
   signers.add(event.params._sender.toHex());
 
@@ -284,6 +296,7 @@ export function handleReleaseApproved(event: ReleaseApproved): void {
 
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ReleaseApproved';
+  log.accountID = project.account;
   log.release = releaseID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
@@ -296,7 +309,8 @@ export function handleReleaseRevoked(event: ReleaseRevoked): void {
   const releaseID = toPaddedHex(event.params._releaseID);
   const release = Release.load(releaseID);
   if (release === null) return;
-
+  const project = Project.load(release.project);
+  if (project === null) return;
   const signers = release.signers.reduce((s, v) => s.add(v), new Set<string>());
   signers.delete(event.params._sender.toHex());
 
@@ -305,6 +319,7 @@ export function handleReleaseRevoked(event: ReleaseRevoked): void {
 
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
   log.type = 'ReleaseRevoked';
+  log.accountID = project.account;
   log.release = releaseID;
   log.sender = event.params._sender.toHex();
   log.logIndex = event.logIndex;
