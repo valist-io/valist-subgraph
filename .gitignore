@@ -3,6 +3,3 @@ node_modules
 
 build
 generated
-
-# ignore generated subgraph config
-subgraph.yaml

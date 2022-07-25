@@ -1,17 +1,17 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: v2.1/Registry
-    network: {{network}}
+    network: ganache
     source:
-      address: "{{v2.1.registry.address}}"
+      address: "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab"
       abi: Registry
-      startBlock: {{v2.1.registry.startBlock}}
+      startBlock: 0
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/v2.1/registry.ts
       abis:
@@ -48,14 +48,14 @@ dataSources:
           handler: handleReleaseRevoked
   - kind: ethereum/contract
     name: v2.1/License
-    network: {{network}}
+    network: ganache
     source:
-      address: "{{v2.1.license.address}}"
+      address: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24"
       abi: License
-      startBlock: {{v2.1.license.startBlock}}
+      startBlock: 0
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/v2.1/license.ts
       abis:
@@ -80,14 +80,14 @@ dataSources:
           handler: handleProductPurchased
   - kind: ethereum/contract
     name: v2/Registry
-    network: {{network}}
+    network: ganache
     source:
-      address: "{{v2.0.registry.address}}"
+      address: "0x0000000000000000000000000000000000000000"
       abi: Registry
-      startBlock: {{v2.0.registry.startBlock}}
+      startBlock: 0
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/v2/registry.ts
       abis:

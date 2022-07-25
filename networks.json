@@ -1,0 +1,30 @@
+{
+  "mumbai": {
+    "v2.1/Registry": {
+      "address": "0xD504d012D78B81fA27288628f3fC89B0e2f56e24",
+      "startBlock": 26134511,
+    },
+    "v2.1/License": {
+      "address": "0x3cE643dc61bb40bB0557316539f4A93016051b81",
+      "startBlock": 26134513
+    },
+    "v2/Registry": {
+      "address": "0x9569bEb0Eba900495cF58028DB094D824d0AE850",
+      "startBlock": 24557788,
+    },
+  },
+  "polygon": {
+    "v2.1/Registry": {
+      "address": "0xD504d012D78B81fA27288628f3fC89B0e2f56e24",
+      "startBlock": 27729588,
+    },
+    "v2.1/License": {
+      "address": "0x3cE643dc61bb40bB0557316539f4A93016051b81",
+      "startBlock": 27729677,
+    },
+    "v2/Registry": {
+      "address": "0xc70A069eC7F887a7497a4bdC7bE666C1e18c8DC3",
+      "startBlock": 25580620,
+    },
+  }
+}
