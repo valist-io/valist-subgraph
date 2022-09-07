@@ -65,7 +65,10 @@ type Currency @entity {
 
 type Purchase @entity {
   id:          ID!
+  sender:      String!
   recipient:   String!
+  
+  token:       String!
   product:     Product!
   price:       BigInt!
 
