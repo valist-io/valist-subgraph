@@ -144,8 +144,10 @@ export function handleProductPurchased(event: ProductPurchased): void {
   currency.save();
 
   const purchase = new Purchase(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
+  purchase.sender = event.params._sender.toHex();
   purchase.recipient = event.params._recipient.toHex();
   purchase.product = projectID;
+  purchase.token = token;
   purchase.price = event.params._price;
   purchase.logIndex = event.logIndex;
   purchase.blockNumber = event.block.number;

@@ -3,7 +3,7 @@
   "license": "MPL-2.0",
   "scripts": {
     "codegen": "npm run prepare:ganache && graph codegen",
-    "build": "npm run prepare:ganache && graph codegen && graph build",
+    "build": "npm run codegen && graph build",
     "deploy:ganache": "npm run prepare:ganache && npm run create-local && npm run deploy-local",
     "deploy:mumbai": "npm run prepare:mumbai && graph deploy --node https://api.thegraph.com/deploy/ valist-io/valistmumbai",
     "deploy:polygon": "npm run prepare:polygon && graph deploy --node https://api.thegraph.com/deploy/ valist-io/valist",
