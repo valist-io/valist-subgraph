@@ -150,6 +150,7 @@ export function handleProductPurchased(event: ProductPurchased): void {
   purchase.token = token;
   purchase.price = event.params._price;
   purchase.logIndex = event.logIndex;
+  purchase.blockTime = event.block.timestamp;
   purchase.blockNumber = event.block.number;
   purchase.save();
 
