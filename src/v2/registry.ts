@@ -303,6 +303,7 @@ export function handleReleaseCreated(event: ReleaseCreated): void {
   release.logIndex = event.logIndex;
   release.blockTime = event.block.timestamp;
   release.blockNumber = event.block.number;
+  release.sender = event.params._sender.toHex();
   release.save();
 
   const log = new Log(event.transaction.hash.toHex() + "-" + event.logIndex.toString());

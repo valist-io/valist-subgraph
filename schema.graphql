@@ -35,6 +35,7 @@ type Release @entity {
   
   project:     Project!
   signers:     [User!]!
+  sender:      String!
   logs:        [Log!]! @derivedFrom(field: "release")
   
   blockTime:   BigInt
