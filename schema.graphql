@@ -82,6 +82,14 @@ type User @entity {
   id:       ID!
   accounts: [Account!]!
   projects: [Project!]!
+  licenses: [License!]! @derivedFrom(field: "user")
+}
+
+type License @entity {
+  id:      ID!
+  user:    User!
+  project: Project!
+  balance: BigInt
 }
 
 type Log @entity {

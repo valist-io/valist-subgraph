@@ -1,12 +1,12 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { toPaddedHex } from "../common";
+import { toPaddedHex, updateLicenseBalance } from "../common";
 
 import { 
   Project, 
   Product, 
   Currency,
   Purchase,
-  Log
+  Log,
 } from "../../generated/schema";
 
 import { 
@@ -15,6 +15,8 @@ import {
   LimitChanged,
   BalanceWithdrawn,
   ProductPurchased,
+  TransferSingle,
+  TransferBatch,
 } from "../../generated/v2.1/License/License";
 
 export function handlePriceChanged(event: PriceChanged): void {
@@ -162,4 +164,31 @@ export function handleProductPurchased(event: ProductPurchased): void {
   log.blockTime = event.block.timestamp;
   log.blockNumber = event.block.number;
   log.save();
+}
+
+export function handleTransferSingle(event: TransferSingle): void {
+  const value = event.params.value;
+  const projectID = toPaddedHex(event.params.id);
+
+  const to = event.params.to.toHex();
+  const from = event.params.from.toHex();
+
+  updateLicenseBalance(to, projectID, value);
+  updateLicenseBalance(from, projectID, value.neg());
+}
+
+export function handleTransferBatch(event: TransferBatch): void {
+  const values = event.params.values;
+  const projectIDs = event.params.ids;
+
+  const to = event.params.to.toHex();
+  const from = event.params.from.toHex();
+
+  for (let i = 0; i < projectIDs.length; i++) {
+    const value = values[i];
+    const projectID = toPaddedHex(projectIDs[i]);
+
+    updateLicenseBalance(to, projectID, value);
+    updateLicenseBalance(from, projectID, value.neg());
+  }
 }

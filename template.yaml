@@ -78,6 +78,10 @@ dataSources:
           handler: handleBalanceWithdrawn
         - event: ProductPurchased(uint256,address,uint256,address,address)
           handler: handleProductPurchased
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
   - kind: ethereum/contract
     name: v2/Registry
     network: {{network}}
