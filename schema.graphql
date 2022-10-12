@@ -89,7 +89,7 @@ type License @entity {
   id:      ID!
   user:    User!
   project: Project!
-  balance: BigInt
+  balance: BigInt!
 }
 
 type Log @entity {

@@ -19,6 +19,7 @@ export function updateLicenseBalance(userID: string, projectID: string, amount: 
     license = new License(licenseID);
     license.user = userID;
     license.project = projectID;
+    license.balance = BigInt.fromU64(0);
   }
 
   license.balance += amount;
